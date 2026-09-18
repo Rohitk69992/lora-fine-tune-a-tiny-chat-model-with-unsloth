@@ -53,8 +53,19 @@ def is_model_4bit_quantized(model):
             return True
     return False
 
-# Step 4 - ensure_pad_token (not yet solved)
-# TODO: implement
+# Step 4 - ensure_pad_token
+def ensure_pad_token(tokenizer):
+    """Guarantee tokenizer.pad_token is not None; fall back to eos_token."""
+    # TODO: if the tokenizer is missing a pad token, reuse its eos token
+    if tokenizer.pad_token is None:
+        # Fallback to eos_token if available
+        if tokenizer.eos_token is not None:
+            tokenizer.pad_token = tokenizer.eos_token
+        else:
+            # Fallback to adding a brand new pad token if eos_token is also missing
+            tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+            
+    return tokenizer
 
 # Step 5 - get_lora_target_modules (not yet solved)
 # TODO: implement
